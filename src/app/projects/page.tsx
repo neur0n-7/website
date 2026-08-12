@@ -8,40 +8,55 @@ const projects = [
   {
     title: "Axiom",
     description:
-      "Placeholder description of the project, the problem it solves, and your role building it.",
-    tags: ["Next.js", "TypeScript", "Tailwind"],
-    href: "https://github.com/neur0n-7",
+      "A local semantic search engine for finding files throughout your computer",
+    tags: ["Python", "FastAPI", "SQLite", "Tauri", "Rust"],
+    href: "https://github.com/neur0n-7/axiom",
   },
   {
-    title: "Sentinel",
+    title: "Sentinel NIDS",
     description:
-      "Intelligent real-time network intrusion detection powered by machine learning",
-    tags: ["Python", "FastAPI", "PostgreSQL"],
-    href: "#",
+      "A machine-learning network intrusion detection system that monitors traffic and detects anomalies",
+    tags: ["Python", "Scapy", "SQLite", "scikit-learn"],
+    href: "https://github.com/neur0n-7/sentinel-nids",
   },
   {
-    title: "Project Three",
+    title: "Mafia",
     description:
-      "Placeholder description of the project, the problem it solves, and your role building it.",
-    tags: ["React", "Node.js"],
-    href: "#",
+      "A real-time multiplayer browser game with a Flask and Socket.IO backend",
+    tags: ["Python", "Flask", "Socket.IO", "JavaScript"],
+    href: "https://neur0n-7.github.io/mafia/",
   },
   {
-    title: "Project Four",
+    title: "Snake AI",
     description:
-      "Placeholder description of the project, the problem it solves, and your role building it.",
-    tags: ["Swift", "iOS"],
-    href: "#",
+      "A reinforcement learning agent trained with a Deep Q-Network to play Snake",
+    tags: ["Python", "PyTorch", "DQN"],
+    href: "https://github.com/neur0n-7/snake-ai",
+  },
+  {
+    title: "Chattix",
+    description:
+      "A Flask and Socket.IO web application for real-time encrypted text chat",
+    tags: ["Python", "Flask", "Socket.IO", "Cryptography"],
+    href: "https://github.com/neur0n-7/chattix",
   },
 ];
+
 
 export default function ProjectsPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-6 py-20">
       <h1 className="font-heading text-4xl tracking-tight">Projects</h1>
       <p className="mt-4 max-w-xl leading-relaxed text-muted">
-        A selection of things I&apos;ve built. Placeholder entries below
-        &mdash; swap in real projects, links, and screenshots.
+        A selection of things I&apos;ve built. See my <a
+    href="https://github.com/neur0n-7"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-accent underline underline-offset-4 hover:opacity-80"
+  >
+    GitHub profile
+  </a>{" "}
+  for more. for more.
       </p>
 
       <div className="mt-12 grid gap-5 sm:grid-cols-2">
