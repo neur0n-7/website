@@ -64,7 +64,13 @@ const components: MDXComponents = {
   img: ({ src, alt }: ImgHTMLAttributes<HTMLImageElement>) => (
     <span className="relative my-6 block h-auto w-full overflow-hidden rounded-lg border border-border">
       <Image
-        src={typeof src === "string" ? `${basePath}${src}` : ""}
+        src={
+          typeof src === "string"
+            ? src.startsWith("/")
+              ? `${basePath}${src}`
+              : src
+            : ""
+        }
         alt={alt ?? ""}
         width={1600}
         height={900}
