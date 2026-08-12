@@ -56,7 +56,7 @@ export default function ProjectsPage() {
   >
     GitHub profile
   </a>{" "}
-  for more. for more.
+  for more.
       </p>
 
       <div className="mt-12 grid gap-5 sm:grid-cols-2">
