@@ -7,14 +7,34 @@ export const metadata: Metadata = {
 
 const experience = [
   {
-    role: "Programming Captain",
+    role: "Founding Member & Programming Captain",
     org: "FIRST Robotics Competition Team 11744 NYX",
     period: "2026 to present",
     points: [
       "Key founding member of NYX and lead the programming team",
-      "Helped establish the team's structure in addition to software training and development system.",
-      "Work across robot software including vision, automation, and subsystem control.",
+      "Helped establish the team's structure, software training and robot code development",
+      "Lead robot software including vision, automation, and subsystem control",
+      "Made budget sheets and helped allocate tens of thousands of dollars across departments and equipment"
     ],
+  },
+  {
+    role: "President",
+    org: "Oak Valley Coding Club",
+    period: "2024 to 2025",
+    points: [
+      "Led the club and taught beginner and advanced programming.",
+      "Prepared members for the USA Computing Olympiad and American Computer Science League competitions.",
+      "Managed members, registration and helped organize club fundraising.",
+      "Before being president, served as Assistant Treasurer in 2023-2024"
+    ],
+  },
+  {
+    role: "Director of Operations",
+    org: "Pi-Thon Club",
+    period: "2025 to 2026",
+    points: [
+      "Taught coding, math, and debate workshops to children in local elementary schools"
+    ]
   },
   {
     role: "Instructor",
@@ -32,15 +52,6 @@ const experience = [
     points: [
       "Taught beginner and competitive programming concepts to students.",
       "Covered Python programming, algorithms, and problem-solving techniques.",
-    ],
-  },
-  {
-    role: "President",
-    org: "Oak Valley Coding Club",
-    period: "2024 to 2025",
-    points: [
-      "Led the club and taught beginner and advanced programming.",
-      "Prepared members for the USA Computing Olympiad and American Computer Science League competitions.",
     ],
   },
 ];
@@ -79,25 +90,28 @@ const achievements = [
     ],
   },
   {
+    title: "FIRST (FLL & FRC)",
+    points: [
+      "FLL 2023-2024: State Tournament #1 Robot Design & #3 Robot Performance, Student Coach",
+      "FLL 2024-2025: Regionals Engineering Excellence Award, Student Coach",
+      "FRC 2025-2026: Software member of 3749 Optix: MVP, Technical Council, Impact Award at Aerospace Valley, Sustainability Award at San Diego Regional",
+      "FRC 2026-present: Key founding member and Programming Captain of Team 11744 NYX",
+    ],
+  },
+  {
     title: "American Computer Science League (ACSL)",
     points: [
-      "Three-time National Finalist",
-      "Silver medalist at 2024-2025 National Finals",
+      "Three-time National Finalist (2x Junior Division, 1x Senior Division)",
+      "Silver medalist at 2024-2025 National Finals (Junior Division)",
+      "2024-2025 Junior Division: 46/48 points prior to finals, tied #3 nationally"
     ],
   },
   {
     title: "CyberPatriot",
     points: [
-      "Linux competitor",
+      "CyberPatriot Linux Main",
       "2024-2025 Middle School Division: #6 nationally at Semifinals, top 0.8%, team MVP",
       "2025-2026 Open Division: top 0.8% nationally at States, top 1.8% nationally at Semifinals",
-    ],
-  },
-  {
-    title: "FIRST Robotics Competition (FRC)",
-    points: [
-      "Key Founding Member and Programming Captain of Team 11744 NYX",
-      "Past member of Team 3749 Optix: software member, MVP, technical council-  Impact Award at Aerospace Valley, Sustainability Award at San Diego Regional"
     ],
   },
 ];
