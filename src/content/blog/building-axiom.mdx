@@ -10,7 +10,7 @@ export const metadata = {
 
 > See Axiom on GitHub at [neur0n-7/axiom](https:/github.com/neur0n-7/axiom).
 
-I have a lot of files. Between code, schoolwork, and all sorts of other stuff, my computer has accumulated thousands upon thousands of files. Traditional search works well when I know exactly the words I used in a file, or what the file name was, but becomes much less useful when I remember a vague idea of what the file contains.
+I have a lot of files. Between code, schoolwork, and all sorts of other stuff, my computer has accumulated thousands upon thousands of files. Traditional search works well when I know exactly what words I used in a file or what the filename was, but becomes much less useful when I only remember a vague idea of what the file contains.
 
 > This was the inspiration for **Axiom**- a tool where I can search my computer intelligently and completely locally.
 
@@ -48,7 +48,7 @@ can find a document discussing how to prepare lasagna even if neither of those e
 
 ![](https://raw.githubusercontent.com/neur0n-7/axiom/main/docs/example-search.png)
 
-But I didn't want to throw away traditional search in the chance that it might be helpfyl. So, Axiom has three modes:
+But I didn't want to throw away traditional search in the chance that it might be helpful. So, Axiom has three modes:
 
 * **Keyword** - traditional text matching
 * **Semantic** - embedding similarity
@@ -166,7 +166,7 @@ My first semantic search implementation technically worked, but the results were
 
 That means searching something like `authentication` can rank `src/authentication.py` over a document that happens to discuss authentication in a completely unrelated way.
 
-Keyword search has its own scoring system as well, considering things such as filename matches, occurrence counts, and where the match occurs. This is why Axiom has a hybrid search mode rather than assuming embeddings are better then keyword search.
+Keyword search has its own scoring system as well, considering things such as filename matches, occurrence counts, and where the match occurs. This is why Axiom has a hybrid search mode rather than assuming embeddings are better than keyword search.
 
 ## Packaging
 
@@ -185,6 +185,6 @@ The embedding model is bundled as well in a sidecar so Axiom can run without dow
 
 Axiom started off as a pretty simple tool- just calculate embeddings, then search them, right? Instead, it led me down a rabbit hole of batching, incremental indexing, database transactions, SQLite WAL, filesystem synchronization, chunking, vectorized computation, ranking, process management, and packaging.
 
-However, Axiom isn't done yet. At the time of writing this blog, v1.0.0 is the latest version released, but there are still a few bugs to be fixed in v1.0.1, and macOS and Linux support will be added in a future version as well, as Axiom is currently a Windows-only product right now due to there only being .exe and .msi downloads. Additionally, I will be looking into better ranking, improve search quality, make indexing faster.
+However, Axiom isn't done yet. At the time of writing this blog, v1.0.0 is the latest version released, but there are still a few bugs to be fixed in v1.0.1, and macOS and Linux support will be added in a future version as well, as Axiom is currently a Windows-only product right now due to there only being .exe and .msi downloads. Additionally, I will be looking into better ranking, improving search quality, and making indexing faster.
 
 All that to find files 😔
