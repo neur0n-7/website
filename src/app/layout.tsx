@@ -22,7 +22,7 @@ const stackSansNotch = localFont({
 
 export const metadata: Metadata = {
   title: "Anish Gupta",
-  description: "Developer portfolio — projects, writing, and background.",
+  description: "Developer portfolio",
 };
 
 export default function RootLayout({

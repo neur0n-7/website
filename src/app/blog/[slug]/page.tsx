@@ -36,7 +36,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const post = await getPost(slug);
-  return { title: post ? `${post.metadata.title} — Anish Gupta` : "Post not found" };
+  return { title: post ? `${post.metadata.title} - Anish Gupta` : "Post not found" };
 }
 
 export default async function BlogPostPage(props: PageProps<"/blog/[slug]">) {
