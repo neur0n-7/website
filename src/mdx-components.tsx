@@ -1,6 +1,8 @@
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
+import Image from "next/image";
 import type { AnchorHTMLAttributes, ImgHTMLAttributes } from "react";
+import { basePath } from "./lib/base-path";
 
 const components: MDXComponents = {
   h1: ({ children }) => (
@@ -60,12 +62,16 @@ const components: MDXComponents = {
   ),
   hr: () => <hr className="my-10 border-border" />,
   img: ({ src, alt }: ImgHTMLAttributes<HTMLImageElement>) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={typeof src === "string" ? src : undefined}
-      alt={alt ?? ""}
-      className="w-full h-auto rounded-lg border border-border my-6"
-    />
+    <span className="relative my-6 block h-auto w-full overflow-hidden rounded-lg border border-border">
+      <Image
+        src={typeof src === "string" ? `${basePath}${src}` : ""}
+        alt={alt ?? ""}
+        width={1600}
+        height={900}
+        className="h-auto w-full"
+        sizes="(min-width: 768px) 672px, 100vw"
+      />
+    </span>
   ),
   code: ({ children }) => (
     <code className="rounded bg-background-elevated border border-border px-1.5 py-0.5 font-mono text-sm text-accent">

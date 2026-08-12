@@ -1,0 +1,190 @@
+export const metadata = {
+  title: "Building Axiom",
+  date: "2026-08-11",
+  excerpt:
+    "How I built Axiom, a local semantic search engine",
+};
+
+
+# Building Axiom: A Local Semantic Search Engine
+
+> See Axiom on GitHub at [neur0n-7/axiom](https:/github.com/neur0n-7/axiom).
+
+I have a lot of files. Between code, schoolwork, and all sorts of other stuff, my computer has accumulated thousands upon thousands of files. Traditional search works well when I know exactly the words I used in a file, or what the file name was, but becomes much less useful when I remember a vague idea of what the file contains.
+
+> This was the inspiration for **Axiom**- a tool where I can search my computer intelligently and completely locally.
+
+## Architecture
+
+Axiom is a desktop application built from several pieces:
+
+[![](https://mermaid.ink/img/pako:eNpNkF9vgjAUxb9Kc18Hjon8sVlMFGUz0cQpyZKNPXRQgSgtKWWTqd99BRlZn3rO-d3ee3uGiMcUMOyP_DtKiZAomIcMqTN9D2FLSSTRHQrqgu4ikRXy8VPcT3zBmaQsDuHjxs4Uu6llypmCfVLK6WbZkjtKRJSiGYkO_3lP8UsW0xMVLfZKZJRS0edzld9K23hL2CFjSR8vmvhllUnaW76y1hnLVmt9Zetfwz54UoGfHSkq61LSvPW7BZGuTy7PQbC5oFm3R2Mh77_ofsNrxaIbrxV-1-CWgAaJyGLAUlRUg5yKnDQSzg0WgkxprsbF6hoTcQghZFdVUxD2xnn-VyZ4laSA9-RYKlUVMZF0npFEkLx3hfpJKjxeMQl4aLVvAD7DCbBpGAPHscZj27BNd-yapgY14JE9cB-GI8dy3ZFpmq591eCn7WoMXMe6_gJZtpiS?type=png)](https://mermaid.ai/live/edit#pako:eNpNkF9vgjAUxb9Kc18Hjon8sVlMFGUz0cQpyZKNPXRQgSgtKWWTqd99BRlZn3rO-d3ee3uGiMcUMOyP_DtKiZAomIcMqTN9D2FLSSTRHQrqgu4ikRXy8VPcT3zBmaQsDuHjxs4Uu6llypmCfVLK6WbZkjtKRJSiGYkO_3lP8UsW0xMVLfZKZJRS0edzld9K23hL2CFjSR8vmvhllUnaW76y1hnLVmt9Zetfwz54UoGfHSkq61LSvPW7BZGuTy7PQbC5oFm3R2Mh77_ofsNrxaIbrxV-1-CWgAaJyGLAUlRUg5yKnDQSzg0WgkxprsbF6hoTcQghZFdVUxD2xnn-VyZ4laSA9-RYKlUVMZF0npFEkLx3hfpJKjxeMQl4aLVvAD7DCbBpGAPHscZj27BNd-yapgY14JE9cB-GI8dy3ZFpmq591eCn7WoMXMe6_gJZtpiS)
+
+The frontend is React and TypeScript, the desktop shell is Tauri/Rust, and the backend is Python/FastAPI. Tauri handles the desktop application and process management (which turned out great and I will likely be using Tauri in the future 🔥) while Python makes it much easier to work with the embedding model and was one of the languages I knew best.
+
+The Python backend is packaged with PyInstaller and launched by Tauri as a sidecar process so that users don't need to run the backend separately, which makes Axiom nice and easy to run.
+
+That architecture introduced its own problems later, but it kept the coding process pretty straightforward.
+
+## Why semantic search?
+
+Keyword search answers:
+
+> "Which files contain these words?"
+
+Semantic search tries to answer:
+
+> "Which files are about this concept?"
+
+Axiom uses `all-MiniLM-L6-v2` from Sentence Transformers to turn text into 384-dimensional vectors.
+
+For example, a query like:
+
+```text
+cooking instructions
+```
+
+can find a document discussing how to prepare lasagna even if neither of those exact words appears in the file.
+
+![](https://raw.githubusercontent.com/neur0n-7/axiom/main/docs/example-search.png)
+
+But I didn't want to throw away traditional search in the chance that it might be helpfyl. So, Axiom has three modes:
+
+* **Keyword** - traditional text matching
+* **Semantic** - embedding similarity
+* **Hybrid** - a combination of both
+
+This ended up being important because semantic similarity alone isn't always enough. A filename containing an exact query can be much more useful than a semantically similar document with a completely unrelated filename.
+
+## Performance problems 💔💔
+
+My first implementation was simple:
+
+```
+file -> read -> chunk -> embed -> write to SQLite
+```
+
+> Yes, it works, but it works terribly slow if you repeat the entire process for thousands of files. The first, and biggest optimization I made was batching. Instead of  embedding every file independently, Axiom collects chunks from multiple files and sends them through the model in a batch. (The current indexing batch size is **32**.)
+
+That changes the process from roughly:
+
+```text
+embed(file 1), write(file 1)
+embed(file 2), write(file 2)
+embed(file 3), write(file 3)
+```
+
+to:
+
+```text
+embed(
+    chunk 1,
+    chunk 2,
+    ...
+    chunk N
+)
+
+write everything
+commit once
+```
+
+The result is dramatically better indexing performance.
+
+Now for the second optimization I had to make, originally I stored the indexed files and their chunks locally:
+
+```sql
+files
+├── path
+├── content
+└── modified
+
+chunks
+├── path
+├── chunk_index
+├── content
+└── embedding
+```
+
+I also store configuration in SQLite so application settings persist between runs.
+
+## SQLite optimizations
+
+Axiom enables SQLite's **Write-Ahead Logging** mode (called WAL for short) :
+
+```sql
+PRAGMA journal_mode=WAL;
+```
+
+This was a deliberate choice. The index is always being modified while Axiom is indexing. Files can be added, changed, or deleted while searches are happening.
+
+WAL makes SQLite much nicer to this kind of workload by allowing readers and writers to operate at the same time without the same amount of blocking that the traditional method causes.
+
+I also use
+
+```sql
+PRAGMA synchronous=NORMAL;
+```
+
+NORMAL reduces the amount of disk synchronization SQLite performs compared with the default FULL setting. The tradeoff is that, if it crashes, the most recent transaction may not have been safely saved.
+
+That tradeoff is ok for Axiom because if the index loses a recent update, Axiom can simply detect the changed files and rebuild that part of the index. In other words, I prioritized indexing performance because the database isn't the sole source of truth of the filesystem.
+
+## Better indexing
+
+Another obvious problem appeared after getting the first indexing pass working. Axiom had to re-embed every file every time it launched, which wasn't great. So now, Axiom stores each file's modification time. When it scans the directory again, it can compare the current modification time with the value stored in the database and skip files that haven't changed.
+
+The filesystem watcher takes this further by detecting files that are created, modified, or deleted while Axiom is running.
+
+## Chunking
+
+Embedding an entire file into one vector creates another problem. Imagine a 2000 line Python file where one embedding has to represent all of those concepts. Instead, Axiom splits files into overlapping chunks.
+
+The current configuration uses
+
+```
+500 words per chunk
+50 word overlap
+```
+
+The overlap is intentional. Without it, an important concept that happens to cross a chunk boundary can get split into two pieces. The chunks are then individually embedded and stored in SQLite. 
+
+Side note: this also technically means semantic search can find *the relevant part of a file* instead of treating the entire file as one giant concept, though I haven't utilized this in Axiom (yet).
+
+## Searching the embeddings
+
+One of the nice properties of `all-MiniLM-L6-v2` is that the embeddings are normalized. That lets me treat cosine similarity as a dot product, like
+
+```python
+similarity = matrix @ query_vector
+```
+
+Instead of calculating cosine similarity separately for every result, Axiom loads the stored embeddings into a NumPy matrix and performs the comparison as a vectorized operation.
+
+## Hybrid search
+
+My first semantic search implementation technically worked, but the results were still sometimes bad. So, Axiom adds additional input to rank everything. Semantic search results can be ranked higher when the query matches the file path or filename.
+
+That means searching something like `authentication` can rank `src/authentication.py` over a document that happens to discuss authentication in a completely unrelated way.
+
+Keyword search has its own scoring system as well, considering things such as filename matches, occurrence counts, and where the match occurs. This is why Axiom has a hybrid search mode rather than assuming embeddings are better then keyword search.
+
+## Packaging
+
+Once the search engine worked, I still had another problem. I wanted Axiom to be something I could package easily as an application, not something that required someone to clone a repository and create a Python virtual environment.
+
+As a result, the backend gets frozen with PyInstaller. But that's still a separate .exe and there's no way to add it to Tauri...
+
+![Sidecar diagram](/images/blog/sidecar.png)
+
+oh wait. nevermind.
+
+The embedding model is bundled as well in a sidecar so Axiom can run without downloading a model after installation (which lets you avoid needing an internet connection).
+
+## What I learned
+
+
+Axiom started off as a pretty simple tool- just calculate embeddings, then search them, right? Instead, it led me down a rabbit hole of batching, incremental indexing, database transactions, SQLite WAL, filesystem synchronization, chunking, vectorized computation, ranking, process management, and packaging.
+
+However, Axiom isn't done yet. At the time of writing this blog, v1.0.0 is the latest version released, but there are still a few bugs to be fixed in v1.0.1, and macOS and Linux support will be added in a future version as well, as Axiom is currently a Windows-only product right now due to there only being .exe and .msi downloads. Additionally, I will be looking into better ranking, improve search quality, make indexing faster.
+
+All that to find files 😔
