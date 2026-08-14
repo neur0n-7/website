@@ -24,7 +24,7 @@ export default function CurrentWorkPage() {
     <div className="mx-auto w-full max-w-4xl px-6 py-20">
       <h1 className="font-heading text-4xl tracking-tight">Current Work</h1>
       <p className="mt-4 max-w-xl leading-relaxed text-muted">
-        Things I'm actively working on and exploring right now.
+        Things I'm actively working on right now.
       </p>
 
       <div className="mt-12 flex flex-col divide-y divide-border border-t border-border">
