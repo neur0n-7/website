@@ -12,9 +12,15 @@ const currentWork = [
     status: "In Progress",
   },
   {
+    title: "NYX Offseason Robot 2026",
+    description:
+      "Leading software development for our offseason bot. I am currently coordinating the robot software as a whole, but am personally handling autoaim/shoot-on-the-move and vision.",
+    status: "In Progress",
+  },
+  {
     title: "Visual SLAM Drone",
     description:
-      "Designing an autonomous drone utilizing visual SLAM, including camera-based localization, ROS 2, PX4, custom PCBs, and embedded computing.",
+      "Designing an autonomous drone utilizing visual SLAM, including camera-based localization, ROS 2, PX4, custom PCBs, a custom 3D-printed chassis, and embedded computing.",
     status: "Planned - 2027",
   },
 ];
