@@ -16,7 +16,7 @@ const currentWork = [
     description:
       "Helping establish and organize the chapter for the Biomedical Engineering Society at my high school.",
     status: "In Progress"
-  }
+  },
   {
     title: "Semantic Search Research Paper",
     description:
