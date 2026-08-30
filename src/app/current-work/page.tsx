@@ -6,15 +6,21 @@ export const metadata: Metadata = {
 
 const currentWork = [
   {
-    title: "Semantic Search Research Paper",
-    description:
-      "Improving Axiom, a local AI-powered semantic search engine, focusing on accuracy and performance. I will be looking for improvements and will use those improvements as a foundation for a research paper.",
-    status: "In Progress",
-  },
-  {
     title: "NYX Offseason Robot 2026",
     description:
       "Leading software development for our offseason bot. I am currently coordinating the robot software as a whole, but am personally handling autoaim/shoot-on-the-move and vision.",
+    status: "In Progress",
+  },
+  {
+    title: "Biomedical Engineering Society",
+    description:
+      "Helping establish and organize the chapter for the Biomedical Engineering Society at my high school.",
+    status: "In Progress"
+  }
+  {
+    title: "Semantic Search Research Paper",
+    description:
+      "Improving Axiom, a local AI-powered semantic search engine, focusing on accuracy and performance. I will be looking for improvements and will use those improvements as a foundation for a research paper.",
     status: "In Progress",
   },
   {
